@@ -1,3 +1,4 @@
+using System.IO;
 using System.Text;
 using System.Threading;
 using System;
@@ -26,10 +27,13 @@ namespace WebServer.Services
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            
-            IPAddress localaddr = IPAddress.Parse(_config.GetValue<string>("ip"));
-            server = new TcpListener(localaddr, _config.GetValue<int>("port"));
+            string ip = File.ReadAllText(Directory.GetCurrentDirectory() + "/ip.txt");
+            int port = Int16.Parse(File.ReadAllText(Directory.GetCurrentDirectory() + "/port.txt"));
+
+            IPAddress localaddr = IPAddress.Parse(ip);
+            server = new TcpListener(localaddr, port);
             server.Start();
+            _logger.LogInformation("Server Started!");
             await StartListener();
         }
 

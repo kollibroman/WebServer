@@ -41,9 +41,12 @@ namespace WebServer
                 .UseConsoleLifetime()
                 .UseSerilog();
 
-                using var _host = host.Build();
+                var _host = host.Build();
 
-                await _host.RunAsync();
+                using(_host)
+                {
+                 await _host.RunAsync();
+                }
         }
     }
 }
